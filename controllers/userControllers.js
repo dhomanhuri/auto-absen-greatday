@@ -7,8 +7,34 @@ const index = async (req, res) => {
         if (!data) {
             throw "data kosong";
         }
+        res.status(200).send({
+            data: data,
+            message: "success",
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+const getbyid = async (req, res) => {
+    try {
+        let data = await model.User.findByPk(req.params.id);
+        if (!data) {
+            throw "data kosong";
+        }
         res.status(200).send(data);
     } catch (error) {
+        console.log(error);
+    }
+};
+const putbyid = async (req, res) => {
+    try {
+        let data = await model.User.update(req.body, { where: { id: req.params.id } });
+        if (!data) {
+            throw "data kosong";
+        }
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(400).send({ status: false });
         console.log(error);
     }
 };
@@ -51,4 +77,4 @@ const dell = async (req, res) => {
     }
 };
 
-module.exports = { index, add, dell };
+module.exports = { index, add, dell, getbyid, putbyid };

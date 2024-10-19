@@ -1,44 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vue CRUD Test</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="sweetalert.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    html {
-      position: relative;
-      min-height: 100%;
+    body {
+      background-color: #f8f9fa;
     }
 
-    body {
-      margin-bottom: 60px;
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-custom {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-custom:hover {
+      background-color: #0056b3;
+    }
+
+    table {
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: #e9ecef;
+    }
+
+    .modal-header {
+      border-bottom: none;
+    }
+
+    .modal-footer {
+      border-top: none;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="page-header">
-      <h1>Vue CRUD Test</h1>
+  <div class="container my-4">
+    <h2 class="text-center mb-4">User Management</h2>
+    <div class="text-center mb-3">
+      <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#userModal">Add User</button>
     </div>
-    <div id="crudsection">
-      <crud-table endpoint="http://localhost:3310/apinya/user"
-        columns='[{"label":"id","type":"number","required":true},{"label":"name","type":"text","required":true},{"label":"auth_token","type":"text","required":true},{"label":"empId","type":"text","required":true},{"label":"phone","type":"text","required":true},{"label":"keywa","type":"text","required":true},{"label":"clock_in","type":"text","required":true},{"label":"clock_out","type":"text","required":true}]'></crud-table>
+
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Name</th>
+              <th>Emp ID</th>
+              <th>Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="userTable">
+            <!-- Dynamic Content -->
+          </tbody>
+        </table>
+      </div>
     </div>
-    <!-- <div id="crudsection">
-      <crud-table endpoint="http://localhost:3310/apinya/user"
-        columns='[{"label":"id","type":"number","required":true},{"label":"name","type":"text","required":true},{"label":"auth_token","type":"text","required":true},{"label":"empId","type":"text","required":true},{"label":"phone","type":"text","required":true},{"label":"keywa","type":"text","required":true},{"label":"clock_in","type":"text","required":true},{"label":"clock_out","type":"text","required":true}]'></crud-table>
-    </div> -->
   </div>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
-  <script src="https://rawgit.com/heruujoko/crudtable/master/dist/crudtable.js"></script>
+
+  <!-- Modal -->
+  <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Add/Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="userForm">
+            <input type="hidden" id="userId">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="auth_token" class="form-label">Auth Token</label>
+              <input type="text" class="form-control" id="auth_token" required>
+            </div>
+            <div class="mb-3">
+              <label for="empId" class="form-label">Emp ID</label>
+              <input type="text" class="form-control" id="empId" required>
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input type="text" class="form-control" id="phone" required>
+            </div>
+            <div class="mb-3">
+              <label for="keywa" class="form-label">Keywa</label>
+              <input type="text" class="form-control" id="keywa" required>
+            </div>
+            <div class="mb-3">
+              <label for="clock_in" class="form-label">Clock In</label>
+              <input type="time" class="form-control" id="clock_in" required>
+            </div>
+            <div class="mb-3">
+              <label for="clock_out" class="form-label">Clock Out</label>
+              <input type="time" class="form-control" id="clock_out" required>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      const apiBaseUrl = 'http://localhost:3310/apinya/user';
+
+      // Load users on page load
+      function loadUsers() {
+        $.ajax({
+          url: apiBaseUrl,
+          method: 'GET',
+          success: function (response) {
+            const users = response.data;
+            let rows = '';
+            $.each(users, function (index, user) {
+              rows += `
+                                <tr>
+                                    <td>${user.name}</td>
+                                    <td>${user.empId}</td>
+                                    <td>${user.phone}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" onclick="editUser(${user.id})">Edit</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+            });
+            $('#userTable').html(rows);
+          },
+          error: function (error) {
+            console.error('Error fetching data:', error);
+          }
+        });
+      }
+
+      // Add or Edit User
+      $('#userForm').on('submit', function (event) {
+        event.preventDefault();
+        const userId = $('#userId').val();
+        const data = {
+          name: $('#name').val(),
+          auth_token: $('#auth_token').val(),
+          empId: $('#empId').val(),
+          phone: $('#phone').val(),
+          keywa: $('#keywa').val(),
+          clock_in: $('#clock_in').val(),
+          clock_out: $('#clock_out').val(),
+        };
+
+        if (userId) {
+          // Edit user
+          $.ajax({
+            url: `${apiBaseUrl}/${userId}`,
+            method: 'PUT',
+            data: data,
+            success: function () {
+              loadUsers();
+              clearForm();
+            },
+            error: function (error) {
+              console.error('Error updating user:', error);
+            }
+          });
+        } else {
+          // Add user
+          $.ajax({
+            url: apiBaseUrl,
+            method: 'POST',
+            data: data,
+            success: function () {
+              loadUsers();
+              clearForm();
+            },
+            error: function (error) {
+              console.error('Error adding user:', error);
+            }
+          });
+        }
+      });
+
+      // Edit user
+      window.editUser = function (id) {
+        $.ajax({
+          url: `${apiBaseUrl}/${id}`,
+          method: 'GET',
+          success: function (user) {
+            $('#userId').val(user.id);
+            $('#name').val(user.name);
+            $('#auth_token').val(user.auth_token);
+            $('#empId').val(user.empId);
+            $('#phone').val(user.phone);
+            $('#keywa').val(user.keywa);
+            $('#clock_in').val(user.clock_in);
+            $('#clock_out').val(user.clock_out);
+
+            // Open modal
+            const userModal = new bootstrap.Modal($('#userModal'));
+            userModal.show();
+          },
+          error: function (error) {
+            console.error('Error fetching user:', error);
+          }
+        });
+      };
+
+      // Delete user
+      window.deleteUser = function (id) {
+        if (confirm('Are you sure you want to delete this user?')) {
+          $.ajax({
+            url: `${apiBaseUrl}/${id}`,
+            method: 'DELETE',
+            success: function () {
+              loadUsers();
+            },
+            error: function (error) {
+              console.error('Error deleting user:', error);
+            }
+          });
+        }
+      };
+
+      // Clear form
+      function clearForm() {
+        $('#userId').val('');
+        $('#name').val('');
+        $('#auth_token').val('');
+        $('#empId').val('');
+        $('#phone').val('');
+        $('#keywa').val('');
+        $('#clock_in').val('');
+        $('#clock_out').val('');
+        const userModal = bootstrap.Modal.getInstance($('#userModal'));
+        userModal.hide();
+      }
+
+      // Initial load
+      loadUsers();
+    });
+  </script>
 </body>
 
 </html>

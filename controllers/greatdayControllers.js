@@ -1,8 +1,10 @@
+const moment = require("moment");
 const axios = require("axios");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const model = require("../models/index");
+const { exec } = require("child_process"); // Mengimpor exec untuk menjalankan shell command
 
 app.use(bodyParser.json());
 
@@ -125,15 +127,35 @@ const reqAbsen = async (req, res) => {
         res.status(500).send("An error occurred");
     }
 };
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Fungsi untuk delay
 
 const cron_runner = async (req, res) => {
     console.log("cron berjalan");
     const data = await model.User.findAll();
     console.log(data);
+
+    const currentTime = moment().format("HH:mm");
+
+    for (const user of data) {
+        if (user.clock_in === currentTime || user.clock_out === currentTime) {
+            console.log(`User ${user.name} sudah clock in pada ${currentTime}`);
+            exec(
+                `./public/curlheaders.sh ${user.empId} ${user.auth_token} ${user.phone} ${user.keywa}`,
+                (error, stdout, stderr) => {
+                    if (error) {
+                        console.error(`Error executing script: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.error(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                }
+            );
+        }
+        await sleep(1000);
+    }
 };
 
 module.exports = { reqAbsen, cron_runner };
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });

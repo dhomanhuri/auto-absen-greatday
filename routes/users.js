@@ -16,6 +16,8 @@ router.post("/login", auth, authControllers.login);
 router.get("/islogin", auth, authControllers.isLogin);
 router.get("/absen", greatdayControllers.cron_runner);
 router.get("/user", userControllers.index);
+router.get("/user/:id", userControllers.getbyid);
+router.put("/user/:id", userControllers.putbyid);
 router.post("/user", userControllers.add);
 router.delete("/user/:id", userControllers.dell);
 
