@@ -1,12 +1,15 @@
 #!/bin/bash
 
 today=$(date +"%Y-%m-%d")
-empId="DO220228"
+empId="$1"
+# empId="DO220228"
 base_url="https://apigonbcv2c15.dataon.com"
-# auth_token="SFGO172916175764204590519287655668"
-auth_token="SFGO172916269593203298421870918473"
-phone="6285731234852"
-keywa="4573794"
+auth_token="$2"
+# auth_token="SFGO172916269593203298421870918473"
+phone="$3"
+# phone="6285731234852"
+keywa="$4"
+# keywa="4573794"
 send_whatsapp_message() {
     local message=$1
     local encoded_message=$(echo $message | jq -sRr @uri)
