@@ -140,7 +140,7 @@ const cron_runner = async (req, res) => {
         if (user.clock_in === currentTime || user.clock_out === currentTime) {
             console.log(`User ${user.name} sudah clock in pada ${currentTime}`);
             exec(
-                `./public/curlheaders.sh ${user.empId} ${user.auth_token} ${user.phone} ${user.keywa}`,
+                `sh ./public/curlheaders.sh ${user.empId} ${user.auth_token} ${user.phone} ${user.keywa}`,
                 (error, stdout, stderr) => {
                     if (error) {
                         console.error(`Error executing script: ${error.message}`);

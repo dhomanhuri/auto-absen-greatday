@@ -8,6 +8,7 @@ RUN apk add git
 RUN apk add nano
 RUN apk add tzdata
 RUN apk add chromium
+RUN apk add curl jq  # Tambahkan ini untuk menginstal curl dan jq
 RUN cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 RUN echo "Asia/Jakarta" >  /etc/timezone
 RUN date
@@ -21,4 +22,4 @@ COPY . .
 
 EXPOSE 3310
 
-CMD [ "npm", "start" ]  
+CMD [ "npm", "start" ]
